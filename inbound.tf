@@ -1,6 +1,7 @@
 resource "azurerm_firewall_nat_rule_collection" "main" {
+  count               = length(var.aks_config)
   name                = "paloDnat"
-  azure_firewall_name = azurerm_firewall.main.name
+  azure_firewall_name = azurerm_firewall.main[count.index].name
   resource_group_name = var.rg_name
   priority            = 200
   action              = "Dnat"
@@ -21,7 +22,7 @@ resource "azurerm_firewall_nat_rule_collection" "main" {
       ]
 
       destination_addresses = [
-        azurerm_public_ip.main.ip_address
+        azurerm_public_ip.main[count.index].ip_address
       ]
 
       protocols = [
