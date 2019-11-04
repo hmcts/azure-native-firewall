@@ -1,5 +1,5 @@
 resource "azurerm_firewall_nat_rule_collection" "main" {
-  name                = "dnat-${lookup(var.common_tags, "activityName")}"
+  name                = "paloDnat"
   azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.rg_name
   priority            = 200
@@ -10,7 +10,7 @@ resource "azurerm_firewall_nat_rule_collection" "main" {
     for_each = var.azfw_dnat_rule_palo_lb
 
     content {
-      name = "${lookup(var.common_tags, "activityName")}-${rules.value}"
+      name = "palo-${rules.value}"
 
       source_addresses = [
         "*",
