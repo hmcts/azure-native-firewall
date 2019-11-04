@@ -1,0 +1,36 @@
+resource "azurerm_firewall_nat_rule_collection" "main" {
+  name                = "dnat-${lookup(var.common_tags, "activityName")}"
+  azure_firewall_name = azurerm_firewall.main.name
+  resource_group_name = var.rg_name
+  priority            = lookup(var.firewall, "priority")
+  action              = "Dnat"
+
+  dynamic "rule" {
+    iterator = rules
+    for_each = lookup(var.firewall, "dnat_rules")
+
+    content {
+      name = "${lookup(var.common_tags, "activityName")}-${rules.value}"
+
+      source_addresses = [
+        "*",
+      ]
+
+      destination_ports = [
+        "80",
+      ]
+
+      destination_addresses = [
+        azurerm_public_ip.main.ip_address
+      ]
+
+      protocols = [
+        "TCP"
+      ]
+
+      translated_address = rules.value
+      translated_port    = "80"
+
+    }
+  }
+}
