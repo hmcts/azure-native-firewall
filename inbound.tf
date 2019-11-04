@@ -2,12 +2,12 @@ resource "azurerm_firewall_nat_rule_collection" "main" {
   name                = "dnat-${lookup(var.common_tags, "activityName")}"
   azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.rg_name
-  priority            = lookup(var.firewall, "priority")
+  priority            = 200
   action              = "Dnat"
 
   dynamic "rule" {
     iterator = rules
-    for_each = lookup(var.firewall, "dnat_rules")
+    for_each = var.azfw_dnat_rule_palo_lb
 
     content {
       name = "${lookup(var.common_tags, "activityName")}-${rules.value}"
