@@ -1,4 +1,19 @@
 provider "azurerm" {
-  alias           = "aks"
-  subscription_id = lookup(var.aks_config, "subscription")
+  alias = "ithc"
+}
+
+provider "azurerm" {
+  alias = "perftest"
+}
+
+provider "azurerm" {
+  alias = "aat"
+}
+
+provider "azurerm" {
+  alias = "prod"
+}
+
+provider "azurerm" {
+  alias = "sbox"
 }
