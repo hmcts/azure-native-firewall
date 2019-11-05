@@ -1,5 +1,5 @@
 data "azurerm_log_analytics_workspace" "main" {
-  name                = "hmcts-${var.environment}-law"
+  name                = "hmcts-dmz-${var.environment}-law"
   resource_group_name = var.rg_name
 }
 
