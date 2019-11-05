@@ -1,5 +1,5 @@
 data "azurerm_virtual_network" "aks" {
-  provider            = azurerm.aks
+  provider            = "azurerm.aks"
   count               = length(var.aks_config)
   name                = lookup(var.aks_config[count.index], "vnet_name")
   resource_group_name = lookup(var.aks_config[count.index], "rg_name")
