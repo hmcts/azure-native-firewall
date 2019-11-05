@@ -16,6 +16,7 @@ resource "azurerm_virtual_network_peering" "hub_to_aks" {
   virtual_network_name         = var.vnet_name
   remote_virtual_network_id    = data.azurerm_virtual_network.aks[count.index].id
   allow_virtual_network_access = true
+  depends_on                        = ["data.azurerm_virtual_network.hub-vnet"]
 }
 
 resource "azurerm_virtual_network_peering" "aks_to_hub" {
@@ -25,4 +26,5 @@ resource "azurerm_virtual_network_peering" "aks_to_hub" {
   virtual_network_name         = data.azurerm_virtual_network.aks[count.index].name
   remote_virtual_network_id    = data.azurerm_virtual_network.hub-vnet.id
   allow_virtual_network_access = true
+  depends_on                        = ["data.azurerm_virtual_network.hub-vnet"]
 }
