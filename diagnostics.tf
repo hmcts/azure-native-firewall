@@ -4,6 +4,7 @@ data "azurerm_log_analytics_workspace" "main" {
 }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories" {
+  count       = length(var.aks_config)
   resource_id = azurerm_firewall.main[0].id
 }
 
