@@ -4,12 +4,13 @@ data "azurerm_log_analytics_workspace" "main" {
 }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories" {
-  resource_id = azurerm_firewall.main.id
+  resource_id = azurerm_firewall.main[0].id
 }
 
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
+  count                      = length(var.aks_config)
   name                       = "fw-log-analytics"
-  target_resource_id         = azurerm_firewall.main.id
+  target_resource_id         = azurerm_firewall.main[count.index].id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.main.id
 
   dynamic "log" {
