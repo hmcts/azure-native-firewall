@@ -1,3 +1,4 @@
 provider "azurerm" {
-  alias = "aks"
+  alias           = "aks"
+  subscription_id = lookup(var.aks_config, "subscription")
 }
