@@ -1,4 +1,4 @@
 provider "azurerm" {
-    alias        = "aks"
-    subscription = lookup(var.peering_setup, "subscription","")
+    alias           = "aks"
+    subscription_id = lookup(var.peering_setup, "subscription","")
 }
