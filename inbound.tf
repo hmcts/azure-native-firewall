@@ -8,7 +8,7 @@ resource "azurerm_firewall_nat_rule_collection" "main" {
 
   dynamic "rule" {
     iterator = rules
-    for_each = var.azfw_dnat_rule_palo_lb
+    for_each = var.azfw_dnat_rule_palo
 
     content {
       name = "palo-${rules.value}"
