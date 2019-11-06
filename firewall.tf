@@ -1,6 +1,6 @@
 resource "azurerm_firewall" "main" {
   count               = length(var.aks_config)
-  name                = "${var.environment}-${var.location}-${lookup(var.aks_config[count.index], "aks_env")}"
+  name                = "${var.environment}-${var.location}-${var.aks_config[count.index]}"
   location            = var.location
   resource_group_name = var.rg_name
 
