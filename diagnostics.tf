@@ -4,19 +4,17 @@ data "azurerm_log_analytics_workspace" "main" {
 }
 
 data "azurerm_monitor_diagnostic_categories" "diagnostic_categories" {
-  count       = var.aks_config != "" ? 1 : 0
-  resource_id = azurerm_firewall.main[count.index].id
+  resource_id = azurerm_firewall.main.id
 }
 
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
-  count                      = var.aks_config != "" ? 1 : 0
   name                       = "fw-log-analytics"
-  target_resource_id         = azurerm_firewall.main[count.index].id
+  target_resource_id         = azurerm_firewall.main.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.main.id
 
   dynamic "log" {
     iterator = log
-    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories[count.index].logs : {
+    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.logs : {
       category = category
     }]
 
@@ -32,7 +30,7 @@ resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
 
   dynamic "metric" {
     iterator = metric
-    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories[count.index].metrics : {
+    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.metrics : {
       category = category
     }]
 

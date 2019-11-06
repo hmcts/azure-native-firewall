@@ -1,7 +1,7 @@
 resource "azurerm_firewall_nat_rule_collection" "main" {
-  count               = var.aks_config != "" ? 1 : 0
+  count               = length(var.aks_config)
   name                = "paloDnat"
-  azure_firewall_name = azurerm_firewall.main[count.index].name
+  azure_firewall_name = azurerm_firewall.main.name
   resource_group_name = var.rg_name
   priority            = 200
   action              = "Dnat"
