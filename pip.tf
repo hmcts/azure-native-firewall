@@ -1,4 +1,5 @@
 resource "azurerm_public_ip" "main" {
+  count               = var.aks_config != "" ? 1 : 0
   name                = "fw-${var.location}-${var.environment}-${var.aks_config}-pip"
   location            = var.location
   resource_group_name = var.rg_name

@@ -1,4 +1,5 @@
 resource "azurerm_firewall" "main" {
+  count               = var.aks_config != "" ? 1 : 0
   name                = "${var.environment}-${var.location}-${var.aks_config}"
   location            = var.location
   resource_group_name = var.rg_name
@@ -6,7 +7,7 @@ resource "azurerm_firewall" "main" {
   ip_configuration {
     name                 = lookup(var.common_tags, "activityName")
     subnet_id            = var.subnet_id
-    public_ip_address_id = azurerm_public_ip.main.id
+    public_ip_address_id = azurerm_public_ip.main[count.index].id
   }
 
   tags = var.common_tags
