@@ -9,6 +9,7 @@ resource "azurerm_firewall" "main" {
     public_ip_address_id            = azurerm_public_ip.main[0].id
   }
 
+<<<<<<< HEAD:10-firewall.tf
   tags                              = var.common_tags
 }
 
@@ -24,4 +25,7 @@ resource "null_resource" "ip_config" {
   }
 
   depends_on                        = [azurerm_firewall.main]
+=======
+  tags = var.common_tags
+>>>>>>> c871f58227772e7cd784975357770247539738d1:firewall.tf
 }
