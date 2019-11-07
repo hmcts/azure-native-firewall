@@ -6,7 +6,7 @@ resource "azurerm_firewall" "main" {
   dynamic "ip_configuration" {
     iterator = ip_address
     for_each = [for ip_address in azurerm_public_ip.main : {
-      public_ip_address_id = ip_address.id
+      public_ip_address_id   = ip_address.id
       public_ip_address_name = ip_address.name
     }]
 

@@ -1,17 +1,5 @@
-data "azurerm_virtual_network" "aks" {
-  count               = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
-  provider            = azurerm.aks
-  name                = "core-${lookup(var.peering_setup, "env")}-vnet"
-  resource_group_name = "aks-infra-${lookup(var.peering_setup, "env")}-rg"
-}
-
-data "azurerm_virtual_network" "hub_vnet" {
-  name                = var.vnet_name
-  resource_group_name = var.rg_name
-}
-
 resource "azurerm_virtual_network_peering" "hub_to_aks" {
-  count                        = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
+  count                        = lookup(var.peering_setup, "subscription", "") == "" ? 0 : 1
   name                         = "hub_to_aks"
   resource_group_name          = data.azurerm_virtual_network.hub_vnet.name
   virtual_network_name         = data.azurerm_virtual_network.hub_vnet.name
@@ -20,7 +8,7 @@ resource "azurerm_virtual_network_peering" "hub_to_aks" {
 }
 
 resource "azurerm_virtual_network_peering" "aks_to_hub" {
-  count                        = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
+  count                        = lookup(var.peering_setup, "subscription", "") == "" ? 0 : 1
   provider                     = azurerm.aks
   name                         = "aks_to_hub"
   resource_group_name          = data.azurerm_virtual_network.aks[0].resource_group_name
