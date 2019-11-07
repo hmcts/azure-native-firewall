@@ -12,7 +12,7 @@ data "azurerm_virtual_network" "hub_vnet" {
 
 resource "azurerm_virtual_network_peering" "hub_to_aks" {
   count                        = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
-  name                         = "hub_to_${lookup(var.common_tags, "activityName")}"
+  name                         = "hub_to_aks"
   resource_group_name          = data.azurerm_virtual_network.hub_vnet.name
   virtual_network_name         = data.azurerm_virtual_network.hub_vnet.name
   remote_virtual_network_id    = data.azurerm_virtual_network.aks[0].id
@@ -22,7 +22,7 @@ resource "azurerm_virtual_network_peering" "hub_to_aks" {
 resource "azurerm_virtual_network_peering" "aks_to_hub" {
   count                        = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
   provider                     = azurerm.aks
-  name                         = "${lookup(var.common_tags, "activityName")}_to_hub"
+  name                         = "aks_to_hub"
   resource_group_name          = data.azurerm_virtual_network.aks[0].resource_group_name
   virtual_network_name         = data.azurerm_virtual_network.aks[0].name
   remote_virtual_network_id    = data.azurerm_virtual_network.hub_vnet.id
