@@ -9,7 +9,7 @@ data "azurerm_monitor_diagnostic_categories" "diagnostic_categories" {
 
 
 data "azurerm_virtual_network" "aks" {
-  count               = lookup(var.peering_setup,"subscription","") == "" ? 0 : 1
+  count               = lookup(var.peering_setup, "subscription", "") == "" ? 0 : 1
   provider            = azurerm.aks
   name                = "core-${lookup(var.peering_setup, "env")}-vnet"
   resource_group_name = "aks-infra-${lookup(var.peering_setup, "env")}-rg"

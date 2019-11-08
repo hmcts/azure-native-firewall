@@ -1,31 +1,26 @@
 resource "azurerm_firewall" "main" {
-  name                              = "${var.environment}-${var.location}-fw"
-  location                          = var.location
-  resource_group_name               = var.rg_name
+  name                = "${var.environment}-${var.location}-fw"
+  location            = var.location
+  resource_group_name = var.rg_name
+
+  dynamic "ip_configuration" {
+    iterator = ip_address
+    for_each = [for ip_address in azurerm_public_ip.main : {
+      public_ip_address_id   = ip_address.id
+      public_ip_address_name = ip_address.name
+    }]
+
+    content {
+      name                 = ip_address.value.public_ip_address_name
+      public_ip_address_id = ip_address.value.public_ip_address_id
+    }
+  }
 
   ip_configuration {
-    name                            = var.aks_config[0]
-    subnet_id                       = var.subnet_id
-    public_ip_address_id            = azurerm_public_ip.main[0].id
+    name                 = "primary"
+    subnet_id            = var.subnet_id
+    public_ip_address_id = azurerm_public_ip.primary.id
   }
 
-<<<<<<< HEAD:10-firewall.tf
-  tags                              = var.common_tags
-}
-
-resource "null_resource" "ip_config" {
-  count = length(var.aks_config) > 1 ? length(var.aks_config) : 0
-
-  provisioner "local-exec" {
-    command = <<EOF
-      az login --service-principal -u ${var.arm_client_id} -p ${var.arm_client_secret} --tenant ${var.arm_tenant_id}
-      az account set -s ${var.subscription_id}
-      az network firewall ip-config create --firewall-name ${azurerm_firewall.main.name} --name ${var.aks_config[1]} --public-ip-address ${azurerm_public_ip.main[1].id} --resource-group ${var.rg_name} --vnet-name ${var.vnet_name}
-    EOF
-  }
-
-  depends_on                        = [azurerm_firewall.main]
-=======
   tags = var.common_tags
->>>>>>> c871f58227772e7cd784975357770247539738d1:firewall.tf
 }

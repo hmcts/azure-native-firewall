@@ -1,37 +1,37 @@
 
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
-  name                              = "fw-log-analytics"
-  target_resource_id                = azurerm_firewall.main.id
-  log_analytics_workspace_id        = data.azurerm_log_analytics_workspace.main.id
+  name                       = "fw-log-analytics"
+  target_resource_id         = azurerm_firewall.main.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.main.id
 
   dynamic "log" {
-    iterator                        = log
-    for_each                        = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.logs : {
-      category                      = category
+    iterator = log
+    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.logs : {
+      category = category
     }]
 
     content {
-      category                      = log.value.category
-      enabled                       = true
+      category = log.value.category
+      enabled  = true
 
       retention_policy {
-        enabled                     = true
+        enabled = true
       }
     }
   }
 
   dynamic "metric" {
-    iterator                        = metric
-    for_each                        = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.metrics : {
-      category                      = category
+    iterator = metric
+    for_each = [for category in data.azurerm_monitor_diagnostic_categories.diagnostic_categories.metrics : {
+      category = category
     }]
 
     content {
-      category                      = metric.value.category
-      enabled                       = true
+      category = metric.value.category
+      enabled  = true
 
       retention_policy {
-        enabled                     = true
+        enabled = true
       }
     }
   }
